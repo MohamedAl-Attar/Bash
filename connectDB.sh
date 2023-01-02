@@ -8,13 +8,14 @@ function showTables {
 
 function dropTable {
   echo -e "Enter Table Name: \c"
-  read tName
-  rm $tName 
+  read name
+  rm $name 
+  rm .$name 
   if [[ $? == 0 ]]
   then
     echo "Table Dropped Successfully"
   else
-    echo "Error Dropping Table $tName"
+    echo "Error Dropping Table $name"
   fi
 }
 
