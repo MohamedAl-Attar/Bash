@@ -68,7 +68,7 @@ if [[ $name =~ $pat ]]; then
     echo $temp >>$name
     if [[ $? == 0 ]]; then
         echo "Table $name Created Successfully"
-        tablesMenu
+        showMenu
     else
         echo "Error Creating Table $name"
         showMenu

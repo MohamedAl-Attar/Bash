@@ -5,22 +5,22 @@ shopt -s extglob
 
 export pat="^[a-zA-Z]+[a-zA-Z0-9[:space:]]*"
 
-DBpath=$PWD
-cd ..
+# DBpath=$PWD
+# cd ..
 
+# if [ -d "$PWD/Database" ]; then
+#     echo "im here1"
+#     cd "$PWD/Database" || exit
+# else
+# echo "im here2"
+# cd "$DBpath" || exit
 if [ -d "$PWD/Database" ]; then
-    echo "im here1"
     cd "$PWD/Database" || exit
 else
-    echo "im here2"
-    cd "$DBpath" || exit
-    if [ -d "$PWD/Database" ]; then
-        cd "$PWD/Database" || exit
-    else
-        mkdir "$PWD/Database"
-        cd "$PWD/Database" || exit
-    fi
+    mkdir "$PWD/Database"
+    cd "$PWD/Database" || exit
 fi
+# fi
 
 showMenu() {
     select choice in createDatabase listDatabase removeDatabase connectDatabase Exit; do
@@ -31,7 +31,13 @@ showMenu() {
         listDatabase)
             echo "Databases found:"
             # ls -F | grep /
-            ls -d */
+            # ls -d */
+            res=$(ls -d */ | awk 'BEGIN{FS=" "} { print "- "$1 }')
+            if [[ $res == "" ]]; then
+                echo "No Databases found"
+            else
+                echo $res
+            fi
             # showChoices
             showMenu
             ;;
@@ -51,19 +57,20 @@ showMenu() {
             showMenu
             ;;
         connectDatabase)
+            pwd
             echo "connectDatabase"
             read -r -p "Enter a name for the database: " name
             if [ -d "$name" ]; then
                 cd "$name" || exit
                 echo "Connected to $name database"
-                . connectDB.sh
+                . ../../connectDB.sh
             else
                 echo "$name database not exist,try another name"
             fi
             # main.sh
             showMenu
             ;;
-            
+
         Exit)
             echo "Exit"
             # break
@@ -103,12 +110,6 @@ createDB() {
 }
 
 showMenu
-
-
-
-
-
-
 
 #  createTable listTable dropTable insertTable selectTable removeTable updateTable Exit;
 

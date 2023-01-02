@@ -12,7 +12,7 @@ function selectMenu {
             selectbyCon
             ;;
         "Go back to table Menu")
-            . connectDB.sh
+            . ../../connectDB.sh
             ;;
         *)
             echo "wrong input select again"
@@ -26,7 +26,7 @@ function selectAll {
     read -r -p "Enter Table Name:" name
     if ! [ -f "$PWD/$name" ]; then
         echo "Table not found,try again"
-        selectbyCon
+        selectMenu
     fi
     column -t -s ':' "$name"
     echo
@@ -41,8 +41,11 @@ function selectCol {
     fi
     read -r -p "Enter Column Name:" columnName
     value=$(awk 'BEGIN{FS=":"}{if(NR==1){for(i=1;i<=NF;i++){if($i=="'$columnName'") print i}}}' "$name")
-    # echo $value
-    awk 'BEGIN{FS=":"}{print $'$value'}' "$name"
+    if [[ $value == "" ]]; then
+        echo "The Name you entered is not exist, try again"
+    else
+        awk 'BEGIN{FS=":"}{print $'$value'}' "$name"
+    fi
     selectMenu
 
 }
@@ -100,7 +103,6 @@ function selectwithCond {
                 FS=":"; ORS="\n"
                 }
                 {   
-                    print $indexx
                     if ($indexx '$op' value) print $0
                 }' indexx="$data" value="$val" "$name"
             else
