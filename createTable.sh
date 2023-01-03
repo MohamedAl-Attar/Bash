@@ -67,11 +67,11 @@ if [[ $name =~ $pat ]]; then
                     fi
                 else
                     echo 'Error naming the file, make sure to not start with number,special char and space,try another name'
-                    . ../../connectDB
+                    . ../../connectDB.sh
                 fi
             else
                 echo "zero string,try another name"
-                . ../../connectDB
+                . ../../connectDB.sh
             fi
 
         done
