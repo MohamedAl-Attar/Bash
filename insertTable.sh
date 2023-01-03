@@ -1,22 +1,15 @@
 #!/usr/bin/bash
 echo "insertTable"
-read -r -p "Enter a name for the table: " name
+read -p "Enter a name for the table: " name
 if [[ -f "$name" ]]; then
     colsNum=$(awk 'END{print NR}' ."$name")
-    sep=":"
-    rSep="\n"
     for ((i = 2; i <= colsNum - 1; i++)); do
         colName=$(awk 'BEGIN{FS=":"}{ if(NR=='$i') print $1}' ."$name")
         colType=$(awk 'BEGIN{FS=":"}{if(NR=='$i') print $2}' ."$name")
         colKey=$(awk 'BEGIN{FS=":"}{if(NR=='$i') print $3}' ."$name")
-        echo $colName
-        echo $colType
-        echo $colKey
-        echo -e "Enter value for $colName = "
-        read -r data
+        read -p "Enter value for $colName = " data
         # ValidateDatatype
         if [[ $colType == "int" && $colKey == "PK" ]]; then
-            echo "duk"
             duplicateData="1"
             while ! [[ $data =~ ^[0-9]+$ && $duplicateData == "0" ]]; do
                 if [[ $data =~ ^[0-9]+$ ]]; then
@@ -31,25 +24,24 @@ if [[ -f "$name" ]]; then
                                     }
                                 }
                                 ' VARIABLE=$data $name)
-                    echo "dasdsadasd $duplicateData"
                     if [[ $duplicateData == 1 ]]; then
                         echo "The data you enter is not unique"
-                        echo -e "Enter value for $colName = "
-                        read -r data
+                        echo "Enter value for $colName = "
+                        read data
                     else
                         duplicateData="0"
                     fi
                 else
-                    echo -e "invalid DataType !!"
-                    echo -e "Enter value for $colName = "
-                    read -r data
+                    echo "invalid DataType !!"
+                    echo "Enter value for $colName = "
+                    read data
                 fi
             done
         elif [[ $colType == "int" ]]; then
             while ! [[ $data =~ ^[0-9]*$ ]]; do
-                echo -e "invalid DataType !!"
-                echo -e "$colName ($colType) = \c"
-                read -r data
+                echo "invalid DataType !!"
+                echo "$colName ($colType) = \c"
+                read data
             done
         fi
 

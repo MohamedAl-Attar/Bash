@@ -20,19 +20,18 @@ function selectMenu {
 }
 
 function deleteSpecificData {
-    read -r -p "Enter Table Name:" name
+    read -p "Enter Table Name:" name
     if ! [ -f "$PWD/$name" ]; then
         echo "Table not found,try again"
         showMenu
     fi
-    read -r -p "Enter Column Name:" columnName
+    read -p "Enter Column Name:" columnName
     data=$(awk 'BEGIN{FS=":"}{if(NR==1){for(i=1;i<=NF;i++){if($i=="'$columnName'") print i}}}' $name)
     if [[ $data == "" ]]; then
         echo "Not Found"
         showMenu
     else
-        echo -e "Enter Condition Value: \c"
-        read val
+        read -p "Enter Condition Value:" val
         res=$(awk 'BEGIN{FS=":"}{if ($'$data'=="'$val'") print $'$data'}' $name)
         if [[ $res == "" ]]; then
             echo "Value Not Found"
@@ -53,7 +52,7 @@ function deleteSpecificData {
 }
 
 function DeleteAll {
-    read -r -p "Enter Table Name:" name
+    read -p "Enter Table Name:" name
     if ! [ -f "$PWD/$name" ]; then
         echo "Table not found,try again"
         selectbyCon
